@@ -6,9 +6,10 @@ Each dashboard sits in its own subfolder with its own `dashboard.py` and `requir
 
 ## Dashboards in this repo
 
-| Folder | Post | Deployed at |
-|---|---|---|
-| [`talent-misallocation/`](./talent-misallocation) | *The Great Talent Misallocation* | _(deploy URL goes here once live)_ |
+| Folder | Post | What it is | Deployed at |
+|---|---|---|---|
+| [`talent-misallocation-primer/`](./talent-misallocation-primer) | *The Great Talent Misallocation* | Static labour-market + externality primer (McDonald's janitor; doctor vs. lobbyist) | _(URL goes here once live)_ |
+| [`talent-misallocation-model/`](./talent-misallocation-model) | *The Great Talent Misallocation* | Interactive Lucas / MSV sandbox + methodology | _(URL goes here once live)_ |
 
 ## Adding a new dashboard
 
