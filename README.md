@@ -1,20 +1,25 @@
-# Talent misallocation dashboard
+# Substack dashboards
 
-Interactive companion to the Substack post *The Great Talent Misallocation*.
+Interactive dashboards that accompany posts on [parthsdatastack.substack.com](https://parthsdatastack.substack.com).
 
-Three pages:
+Each dashboard sits in its own subfolder with its own `dashboard.py` and `requirements.txt`, deployed separately on Streamlit Community Cloud.
 
-- **Primer** — labour-market intuition for non-economists. McDonald's janitor sets up demand and supply; doctor vs. lobbyist examples introduce externalities.
-- **Sandbox** — interactive sliders for the Lucas (1978) / Murphy-Shleifer-Vishny (1991) span-of-control model. Compare two sectors by their α parameter; see how convexity in talent drives the top-tail pay we observe.
-- **Methodology** — the math behind the sandbox, derived step by step.
+## Dashboards in this repo
 
-## Run locally
+| Folder | Post | Deployed at |
+|---|---|---|
+| [`talent-misallocation/`](./talent-misallocation) | *The Great Talent Misallocation* | _(deploy URL goes here once live)_ |
+
+## Adding a new dashboard
+
+1. Create a new folder at the repo root, e.g. `<topic>/`.
+2. Drop `dashboard.py`, `requirements.txt`, and any figures / helper scripts into it.
+3. Push to GitHub, deploy on https://share.streamlit.io with *Main file path* = `<topic>/dashboard.py`.
+
+## Run a dashboard locally
 
 ```bash
+cd <folder>
 pip install -r requirements.txt
 streamlit run dashboard.py
 ```
-
-## Deployed
-
-Hosted on Streamlit Community Cloud — see the Substack post for the link.
