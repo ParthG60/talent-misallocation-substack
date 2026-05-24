@@ -10,7 +10,7 @@ from pathlib import Path
 
 import streamlit as st
 
-st.set_page_config(page_title="Labour market primer", layout="wide",
+st.set_page_config(page_title="Labour market primer",
                    page_icon=":material/school:")
 
 FIGS_DIR = Path(__file__).parent / "figures"
