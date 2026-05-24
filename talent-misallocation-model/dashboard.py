@@ -122,28 +122,27 @@ def sandbox_page():
     # --- The setup ---
     st.markdown("## The setup")
     st.markdown(
-        "Throughout the page, *manager* stands in for the **managerial class** of a sector — "
-        "founders, partners, executives, star employees, anyone whose pay tracks firm profit "
-        "rather than a fixed wage."
-    )
-    st.markdown(
-        "A firm has one manager of ability **A** who hires a workforce of **H** people at wage "
-        "**w**. Revenue scales with the manager's ability, an economy-wide productivity factor "
-        "**s**, and the **talent-scalability** parameter **α**. Profit is revenue minus the wage "
-        "bill:"
+        "A firm's **managerial class** — founders, partners, executives, star employees, anyone "
+        "whose pay tracks firm profit rather than a fixed wage — collectively has ability **A**. "
+        "They hire a workforce of **H** people at wage **w**. Revenue scales with their ability "
+        "**A**, with the sector's **technology** level **s**, and with the workforce through the "
+        "**returns-to-labour** parameter **α**. Profit is revenue minus the wage bill:"
     )
     st.latex(
         r"\pi \;=\; \underbrace{s \cdot A \cdot H^{\alpha}}_{\text{revenue}} \;-\; "
         r"\underbrace{w \cdot H}_{\text{wage bill}}"
     )
     st.markdown(
-        "α is what differs across sectors:\n\n"
-        "- **High α (close to 1)** — one manager can productively run a huge operation. A "
-        "hedge-fund PM allocates billions of dollars, a senior FAANG engineer's code reaches "
-        "billions of users, a consulting partner runs hundreds of associates.\n"
-        "- **Low α (close to 0)** — diminishing returns kick in fast. A plumber, a hairdresser, "
-        "a single-restaurant operator can only do so much before extra workers stop adding much "
-        "value."
+        "α is what differs sharply across sectors. It controls how much each additional worker "
+        "contributes to firm output:\n\n"
+        "- **High α (close to 1)** — each extra worker adds nearly as much as the last. In "
+        "finance, more analysts means more AUM the fund can cover, more strategies run in "
+        "parallel, more positions monitored. In big-tech engineering, more engineers means more "
+        "features shipped to the same billion-user base. The workforce keeps producing as it "
+        "scales.\n"
+        "- **Low α (close to 0)** — each extra worker contributes much less than the last. A "
+        "plumber can only fix so many pipes, a hairdresser only so many heads, a restaurant "
+        "kitchen only so many covers. Beyond a few workers the firm hits a wall."
     )
 
     # --- What the model predicts ---
@@ -161,7 +160,7 @@ def sandbox_page():
     )
     st.markdown(
         "Both grow *faster than linearly* in talent, and the bigger α is, the steeper that growth. "
-        "A sector with high talent scalability doesn't just pay top talent a little more — it pays "
+        "A sector where labour scales well doesn't just pay top talent a little more — it pays "
         "them dramatically and non-linearly more. That convexity is what pulls the top of the "
         "talent distribution into high-α sectors."
     )
@@ -190,13 +189,13 @@ def sandbox_page():
     with col_a:
         st.markdown(f"##### Low-scalability sector  (α₁ = {alpha1:.2f})")
         m1, m2, m3 = st.columns(3)
-        m1.metric("Talent scalability α₁", f"{alpha1:.2f}")
+        m1.metric("Returns to labour α₁", f"{alpha1:.2f}")
         m2.metric("Convexity exponent 1/(1−α₁)", f"{conv_exp(alpha1):.2f}")
         m3.metric("Pay growth if A doubles", f"{2.0 ** conv_exp(alpha1):.1f}×")
     with col_b:
         st.markdown(f"##### High-scalability sector  (α₂ = {alpha2:.2f})")
         n1, n2, n3 = st.columns(3)
-        n1.metric("Talent scalability α₂", f"{alpha2:.2f}")
+        n1.metric("Returns to labour α₂", f"{alpha2:.2f}")
         n2.metric("Convexity exponent 1/(1−α₂)", f"{conv_exp(alpha2):.2f}")
         n3.metric("Pay growth if A doubles", f"{2.0 ** conv_exp(alpha2):.1f}×")
 
@@ -279,14 +278,14 @@ def methodology_page():
 
     st.markdown("## 2. Production function")
     st.markdown(
-        "We assume diminishing returns to adding workers — one manager can run only so many people "
-        "before each extra worker contributes less. The standard form is:"
+        "We assume diminishing returns to adding workers — beyond a few hires each extra worker "
+        "contributes less than the last. The standard form is:"
     )
     st.latex(r"F(H) = H^{\alpha}, \quad 0 < \alpha < 1")
     st.markdown(
-        "α is the **talent-scalability** parameter. It measures how much output one talented "
-        "manager can amplify through the workforce they direct. α also turns out to equal the "
-        "**workforce's share of revenue** — see §4."
+        "α is the **returns-to-labour** parameter. It controls how much each additional worker "
+        "adds to firm output — high α means returns diminish slowly, low α means they diminish "
+        "fast."
     )
     st.latex(r"\pi(A; \alpha, s, w) \;=\; s \cdot A \cdot H^{\alpha} \;-\; w \cdot H")
 
@@ -304,14 +303,14 @@ def methodology_page():
         r"\cdot (s \, A)^{\!1/(1-\alpha)}\;}"
     )
     st.markdown(
-        "Three pieces, each with meaning:\n\n"
-        "- **(1−α)** — the **manager's share of revenue**. Workforce gets α; manager keeps the rest.\n"
-        "- **(α/w)^(α/(1−α))** — a **constant prefactor** depending on workforce share and wages, "
-        "but not on A. Sets the level of profits in the economy; cancels out when comparing two "
-        "managers in the same economy.\n"
-        "- **(sA)^(1/(1−α))** — the **convex core**. Profit scales as talent raised to the convexity "
-        "exponent. This is what drives the convex-pay-in-A result and why high-scalability sectors "
-        "capture the top of the talent distribution."
+        "The first two factors — **(1−α)** and the prefactor **(α/w)^(α/(1−α))** — depend only on "
+        "α and w. They set the level of profits in the economy but don't change with A, and they "
+        "cancel out when comparing two managers in the same sector.\n\n"
+        "The third factor, **(sA)^(1/(1−α))**, is the **convex core**. Profit scales as ability "
+        "raised to **1/(1−α)**. When α is close to 1 — strong returns to labour — this exponent is "
+        "huge, so a small advantage in ability translates into a massive advantage in profit. That's "
+        "the engine behind the convex-pay-in-talent result, and why high-α sectors capture the top "
+        "of the talent distribution."
     )
 
     st.markdown("---")
