@@ -73,8 +73,6 @@ def split_bar_fig(A_val, alpha1, alpha2, s, w):
     wb2 = float(wage_bill(A_val, alpha2, s, w))
     mp2 = float(profit(A_val, alpha2, s, w))
     rev1, rev2 = wb1 + mp1, wb2 + mp2
-    share1 = mp1 / rev1 * 100.0 if rev1 > 0 else 0.0
-    share2 = mp2 / rev2 * 100.0 if rev2 > 0 else 0.0
 
     fig = go.Figure()
     fig.add_trace(go.Bar(name="Workforce", x=labels, y=[wb1, wb2],
@@ -83,12 +81,10 @@ def split_bar_fig(A_val, alpha1, alpha2, s, w):
                          marker_color=NAVY))
 
     annotations = [
-        dict(x=labels[0], y=rev1,
-             text=f"<b>Manager:</b> ${mp1:,.2f}<br>(share = {share1:.0f}%)",
-             showarrow=False, yshift=24, font=dict(size=11, color="#222")),
-        dict(x=labels[1], y=rev2,
-             text=f"<b>Manager:</b> ${mp2:,.2f}<br>(share = {share2:.0f}%)",
-             showarrow=False, yshift=24, font=dict(size=11, color="#222")),
+        dict(x=labels[0], y=rev1, text=f"<b>Manager:</b> ${mp1:,.2f}",
+             showarrow=False, yshift=18, font=dict(size=11, color="#222")),
+        dict(x=labels[1], y=rev2, text=f"<b>Manager:</b> ${mp2:,.2f}",
+             showarrow=False, yshift=18, font=dict(size=11, color="#222")),
     ]
     y_top = max(rev1, rev2) * 1.32 if max(rev1, rev2) > 0 else 1.0
 
@@ -117,15 +113,24 @@ def sandbox_page():
     # --- Intro ---
     st.markdown(
         "A sector hires workers, and one talented person — call them the **manager** — runs the "
-        "operation. We measure how scalable that talent is via a parameter **α**: how much output "
-        "one talented person can be leveraged through their workforce."
+        "operation and keeps the residual profit. Throughout this page, *manager* stands in for "
+        "the **managerial class** of a sector: founders, partners, executives, star employees — "
+        "anyone whose pay is tied directly to firm profit rather than a fixed wage."
+    )
+    st.markdown("The firm's profit is its revenue minus the wage bill it pays its workforce:")
+    st.latex(
+        r"\pi \;=\; \underbrace{s \cdot A \cdot H^{\alpha}}_{\text{revenue}} \;-\; "
+        r"\underbrace{w \cdot H}_{\text{wage bill}}"
     )
     st.markdown(
-        "α also equals the **share of revenue that goes to the workforce**. The manager keeps the "
-        "rest, **1 − α**. So a high-α sector means workers capture a big slice — but the operation "
-        "scales hard around the rare talent."
+        "**A** is the manager's ability, **H** is the workforce hired at wage **w**, **s** is a "
+        "sector-wide productivity factor, and **α** captures **talent scalability** — how much "
+        "output one talented person can leverage through their workforce."
     )
-    st.markdown("The model gives two clean proportionalities:")
+    st.markdown(
+        "Solving the firm's hiring problem (see Methodology), the workforce hired and the manager's "
+        "profit both come out proportional to ability **A**, with an exponent that depends on **α**:"
+    )
     st.latex(
         r"H^{*}(A) \;\propto\; A^{\,1/(1-\alpha)} \qquad \text{(workforce hired)}"
     )
@@ -134,13 +139,11 @@ def sandbox_page():
     )
     st.markdown(
         "Both grow faster than the talent itself. The bigger α is, the more convex the growth — "
-        "so high-scalability sectors capture the top of the talent distribution. The catch: even "
-        "though workers keep a *bigger* share of revenue in those sectors, **the manager still earns "
-        "more in absolute dollars**, because the pie itself is much larger."
+        "so high-scalability sectors capture the top of the talent distribution."
     )
     st.markdown(
-        "*Use the two sliders to compare a low-scalability sector and a high-scalability sector. "
-        "For the algebra, see the Methodology page.*"
+        "*Use the two sliders below to compare a low-scalability sector and a high-scalability "
+        "sector. For the algebra, see the Methodology page.*"
     )
 
     # --- Sidebar (two sliders only) ---
@@ -160,15 +163,15 @@ def sandbox_page():
     with col_a:
         st.markdown(f"##### Low-scalability sector  (α₁ = {alpha1:.2f})")
         m1, m2, m3 = st.columns(3)
-        m1.metric("Workforce share α₁", f"{alpha1:.2f}")
-        m2.metric("Manager share 1−α₁", f"{1.0 - alpha1:.2f}")
-        m3.metric("Convexity 1/(1−α₁)", f"{conv_exp(alpha1):.2f}")
+        m1.metric("Talent scalability α₁", f"{alpha1:.2f}")
+        m2.metric("Convexity exponent 1/(1−α₁)", f"{conv_exp(alpha1):.2f}")
+        m3.metric("Pay growth if A doubles", f"{2.0 ** conv_exp(alpha1):.1f}×")
     with col_b:
         st.markdown(f"##### High-scalability sector  (α₂ = {alpha2:.2f})")
         n1, n2, n3 = st.columns(3)
-        n1.metric("Workforce share α₂", f"{alpha2:.2f}")
-        n2.metric("Manager share 1−α₂", f"{1.0 - alpha2:.2f}")
-        n3.metric("Convexity 1/(1−α₂)", f"{conv_exp(alpha2):.2f}")
+        n1.metric("Talent scalability α₂", f"{alpha2:.2f}")
+        n2.metric("Convexity exponent 1/(1−α₂)", f"{conv_exp(alpha2):.2f}")
+        n3.metric("Pay growth if A doubles", f"{2.0 ** conv_exp(alpha2):.1f}×")
 
     # --- Compute curves ---
     A = np.linspace(1.0, A_max, 400)
@@ -199,7 +202,7 @@ def sandbox_page():
     )
 
     # --- Revenue split: two panels at low and high A ---
-    st.markdown("### Where does the revenue go? Workforce vs. manager")
+    st.markdown("### Revenue and manager's profit at two ability levels")
 
     A_low = 2.0
     A_high = 5.0
@@ -211,8 +214,7 @@ def sandbox_page():
 
     st.caption(
         f"At A = {A_low:g} the two sectors are comparable. At A = {A_high:g} the high-scalability "
-        "sector's pie is much larger — and even though workers keep a bigger share, the manager's "
-        "absolute take is far bigger too."
+        "sector's pie grows much faster — and the manager's take grows with it."
     )
 
 
