@@ -110,26 +110,48 @@ def split_bar_fig(A_val, alpha1, alpha2, s, w):
 def sandbox_page():
     st.title("Knowledge work model of the economy")
 
-    # --- Intro ---
+    # --- The puzzle ---
     st.markdown(
-        "A sector hires workers, and one talented person — call them the **manager** — runs the "
-        "operation and keeps the residual profit. Throughout this page, *manager* stands in for "
-        "the **managerial class** of a sector: founders, partners, executives, star employees — "
-        "anyone whose pay is tied directly to firm profit rather than a fixed wage."
+        "Top graduates pile into finance, consulting, and big-tech engineering — and away from "
+        "plumbing, teaching, retail, and most of the rest of the economy. One reason is structural: "
+        "in some sectors a single talented person can be leveraged through a vast operation; in "
+        "others, returns to talent flatten fast. This page lets you play with that scaling and "
+        "watch the pay curve bend."
     )
-    st.markdown("The firm's profit is its revenue minus the wage bill it pays its workforce:")
+
+    # --- The setup ---
+    st.markdown("## The setup")
+    st.markdown(
+        "Throughout the page, *manager* stands in for the **managerial class** of a sector — "
+        "founders, partners, executives, star employees, anyone whose pay tracks firm profit "
+        "rather than a fixed wage."
+    )
+    st.markdown(
+        "A firm has one manager of ability **A** who hires a workforce of **H** people at wage "
+        "**w**. Revenue scales with the manager's ability, an economy-wide productivity factor "
+        "**s**, and the **talent-scalability** parameter **α**. Profit is revenue minus the wage "
+        "bill:"
+    )
     st.latex(
         r"\pi \;=\; \underbrace{s \cdot A \cdot H^{\alpha}}_{\text{revenue}} \;-\; "
         r"\underbrace{w \cdot H}_{\text{wage bill}}"
     )
     st.markdown(
-        "**A** is the manager's ability, **H** is the workforce hired at wage **w**, **s** is a "
-        "sector-wide productivity factor, and **α** captures **talent scalability** — how much "
-        "output one talented person can leverage through their workforce."
+        "α is what differs across sectors:\n\n"
+        "- **High α (close to 1)** — one manager can productively run a huge operation. A "
+        "hedge-fund PM allocates billions of dollars, a senior FAANG engineer's code reaches "
+        "billions of users, a consulting partner runs hundreds of associates.\n"
+        "- **Low α (close to 0)** — diminishing returns kick in fast. A plumber, a hairdresser, "
+        "a single-restaurant operator can only do so much before extra workers stop adding much "
+        "value."
     )
+
+    # --- What the model predicts ---
+    st.markdown("## What the model predicts")
     st.markdown(
-        "Solving the firm's hiring problem (see Methodology), the workforce hired and the manager's "
-        "profit both come out proportional to ability **A**, with an exponent that depends on **α**:"
+        "When the firm hires optimally (full algebra on the Methodology page), the workforce "
+        "hired and the manager's profit both come out proportional to ability **A** — with an "
+        "exponent set entirely by α:"
     )
     st.latex(
         r"H^{*}(A) \;\propto\; A^{\,1/(1-\alpha)} \qquad \text{(workforce hired)}"
@@ -138,12 +160,17 @@ def sandbox_page():
         r"\pi^{*}(A) \;\propto\; A^{\,1/(1-\alpha)} \qquad \text{(manager's profit)}"
     )
     st.markdown(
-        "Both grow faster than the talent itself. The bigger α is, the more convex the growth — "
-        "so high-scalability sectors capture the top of the talent distribution."
+        "Both grow *faster than linearly* in talent, and the bigger α is, the steeper that growth. "
+        "A sector with high talent scalability doesn't just pay top talent a little more — it pays "
+        "them dramatically and non-linearly more. That convexity is what pulls the top of the "
+        "talent distribution into high-α sectors."
     )
+
+    # --- Try it ---
+    st.markdown("## Try it")
     st.markdown(
-        "*Use the two sliders below to compare a low-scalability sector and a high-scalability "
-        "sector. For the algebra, see the Methodology page.*"
+        "Use the two sliders to compare a low-scalability sector with a high-scalability sector. "
+        "Watch how the convexity exponent and the pay-doubles multiplier widen as α rises."
     )
 
     # --- Sidebar (two sliders only) ---
@@ -202,7 +229,12 @@ def sandbox_page():
     )
 
     # --- Revenue split: two panels at low and high A ---
-    st.markdown("### Revenue and manager's profit at two ability levels")
+    st.markdown("### Now in dollars — same firm, two ability levels")
+    st.markdown(
+        "The curves above are abstract. To make the gap concrete, here's the same firm at two "
+        "specific ability levels — a moderately good manager (A = 2) and a top manager (A = 5) "
+        "— with the workforce wage bill (grey) and the manager's profit (navy) stacked."
+    )
 
     A_low = 2.0
     A_high = 5.0
@@ -213,8 +245,19 @@ def sandbox_page():
         st.plotly_chart(split_bar_fig(A_high, alpha1, alpha2, s, w), width="stretch")
 
     st.caption(
-        f"At A = {A_low:g} the two sectors are comparable. At A = {A_high:g} the high-scalability "
-        "sector's pie grows much faster — and the manager's take grows with it."
+        f"At A = {A_low:g} the two sectors look comparable. At A = {A_high:g} the high-scalability "
+        "sector's pie has grown much faster — and the manager's take has grown with it."
+    )
+
+    # --- Why this matters ---
+    st.markdown("## Why this matters")
+    st.markdown(
+        "Convex pay in ability means high-scalability sectors don't just attract good people — "
+        "they disproportionately attract the *best* people, because that's where a 1% edge in "
+        "ability translates into a much bigger edge in pay. Finance, consulting, and big-tech "
+        "engineering end up over-represented in the career destinations of top graduates, while "
+        "plumbing, teaching, and small business under-recruit from the same pool. Whether that "
+        "allocation is good for society is the question the rest of the post tackles."
     )
 
 
